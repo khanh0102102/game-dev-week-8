@@ -24,7 +24,7 @@ public sealed class EnterGame : MonoBehaviour
         AirplaneFlightController airplane = other.GetComponentInParent<AirplaneFlightController>();
         if (airplane == null || !airplane.HasTakenOff) return;
 
-        if (gameManager == null) gameManager = FindFirstObjectByType<GameManager>();
+        if (gameManager == null) gameManager = FindAnyObjectByType<GameManager>();
         if (gameManager == null)
         {
             Debug.LogError("EnterGame: GameManager was not found in the scene.");
