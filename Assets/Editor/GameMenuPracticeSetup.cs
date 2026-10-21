@@ -4,6 +4,7 @@ using System.IO;
 using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEditor.Events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -128,17 +129,21 @@ public static class GameMenuPracticeSetup
         Image accent = CreateImage("TopAccent", panel.transform, new Color(0.16f, 0.82f, 1f, 1f));
         Center((RectTransform)accent.transform, new Vector2(0f, 226f), new Vector2(850f, 8f));
 
-        CreateText("Eyebrow", panel.transform, font, "FLIGHT CONTROL / CHECKPOINT 08", 16f,
+        GameObject contentRoot = new GameObject("PopupContent", typeof(RectTransform));
+        contentRoot.transform.SetParent(panel.transform, false);
+        Stretch((RectTransform)contentRoot.transform);
+
+        CreateText("Eyebrow", contentRoot.transform, font, "FLIGHT CONTROL / CHECKPOINT 08", 16f,
             FontStyles.Bold, TextAlignmentOptions.Center, new Vector2(0f, 182f), new Vector2(720f, 32f), new Color(0.25f, 0.82f, 0.98f, 1f));
-        TMP_Text title = CreateText("Title", panel.transform, font, "FLIGHT CHECKPOINT", 42f,
+        TMP_Text title = CreateText("Title", contentRoot.transform, font, "FLIGHT CHECKPOINT", 42f,
             FontStyles.Bold, TextAlignmentOptions.Center, new Vector2(0f, 125f), new Vector2(740f, 70f), new Color(0.93f, 0.98f, 1f, 1f));
-        TMP_Text message = CreateText("Message", panel.transform, font,
+        TMP_Text message = CreateText("Message", contentRoot.transform, font,
             "Your airplane has taken off and reached the Enter Wall. Continue to the next scene or restart the flight.", 24f,
             FontStyles.Normal, TextAlignmentOptions.Center, new Vector2(0f, 30f), new Vector2(700f, 112f), new Color(0.78f, 0.87f, 0.93f, 1f));
 
-        Button continueButton = MakeButton(panel.transform, "ContinueButton", "Continue", font,
+        Button continueButton = MakeButton(contentRoot.transform, "ContinueButton", "Continue", font,
             new Color(0.08f, 0.48f, 0.75f, 1f), new Vector2(-155f, -132f), new Vector2(260f, 70f));
-        Button restartButton = MakeButton(panel.transform, "RestartButton", "Restart", font,
+        Button restartButton = MakeButton(contentRoot.transform, "RestartButton", "Restart", font,
             new Color(0.19f, 0.26f, 0.34f, 1f), new Vector2(155f, -132f), new Vector2(260f, 70f));
 
         GameManager manager = camera.GetComponent<GameManager>();
@@ -152,6 +157,9 @@ public static class GameMenuPracticeSetup
         manager.restartButtonText = restartButton.GetComponentInChildren<TMP_Text>();
         manager.nextSceneName = "NextScene";
         enter.gameManager = manager;
+        // Serialize the same On Click() links the lab asks you to set in the Inspector.
+        UnityEventTools.AddPersistentListener(continueButton.onClick, manager.NextScene);
+        UnityEventTools.AddPersistentListener(restartButton.onClick, manager.Restart);
         EnsureEventSystem();
         EditorUtility.SetDirty(manager);
         EditorUtility.SetDirty(enter);
