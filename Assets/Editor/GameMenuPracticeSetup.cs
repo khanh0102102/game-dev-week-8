@@ -237,7 +237,7 @@ public static class GameMenuPracticeSetup
         text.fontStyle = style;
         text.alignment = alignment;
         text.color = color;
-        text.enableWordWrapping = true;
+        text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Overflow;
         text.raycastTarget = false;
         return text;
@@ -269,7 +269,7 @@ public static class GameMenuPracticeSetup
 
     private static void EnsureEventSystem()
     {
-        if (UnityEngine.Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None).Length > 0) return;
+        if (UnityEngine.Object.FindAnyObjectByType<EventSystem>() != null) return;
         GameObject go = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
         go.GetComponent<InputSystemUIInputModule>().AssignDefaultActions();
     }
