@@ -19,8 +19,6 @@ public sealed class GameManager : MonoBehaviour
     private void Awake()
     {
         Time.timeScale = 1f;
-        if (continueButton != null) continueButton.onClick.AddListener(NextScene);
-        if (restartButton != null) restartButton.onClick.AddListener(Restart);
         if (popupCanvas != null) popupCanvas.SetActive(false);
     }
 
@@ -86,8 +84,6 @@ public sealed class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (continueButton != null) continueButton.onClick.RemoveListener(NextScene);
-        if (restartButton != null) restartButton.onClick.RemoveListener(Restart);
         Time.timeScale = 1f;
     }
 }
