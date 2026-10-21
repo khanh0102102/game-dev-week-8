@@ -268,13 +268,20 @@ public static class GameMenuPracticeSetup
 
     private static TMP_FontAsset FindFont()
     {
-        if (TMP_Settings.defaultFontAsset != null) return TMP_Settings.defaultFontAsset;
+        // TMP_Settings can be absent until Essential Resources are imported.
+        TMP_Settings settings = TMP_Settings.GetSettings();
+        if (settings != null && TMP_Settings.defaultFontAsset != null)
+            return TMP_Settings.defaultFontAsset;
+
         string[] ids = AssetDatabase.FindAssets("LiberationSans SDF t:TMP_FontAsset");
-        if (ids.Length == 0) ids = AssetDatabase.FindAssets("t:TMP_FontAsset");
+        if (ids.Length == 0)
+            ids = AssetDatabase.FindAssets("t:TMP_FontAsset");
+
         foreach (string id in ids)
         {
-            TMP_FontAsset f = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(AssetDatabase.GUIDToAssetPath(id));
-            if (f != null) return f;
+            TMP_FontAsset font = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(AssetDatabase.GUIDToAssetPath(id));
+            if (font != null)
+                return font;
         }
         return null;
     }
